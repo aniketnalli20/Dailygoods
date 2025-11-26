@@ -17,7 +17,14 @@ echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Admin</title><link
 echo '<div class="container">';
 echo '<div class="topbar">';
 echo '<h2>Admin Dashboard</h2>';
-echo '<div><a class="btn secondary" href="index.php?page=dashboard">Back</a></div>';
+echo '<div><a class="btn secondary" href="index.php?page=dashboard">Back</a>';
+echo ' <form style="display:inline" method="post" action="actions/role_switch.php">';
+echo '<select name="to">';
+echo '<option value="admin">Admin</option>';
+echo '<option value="vendor">Vendor</option>';
+echo '<option value="customer">Customer</option>';
+echo '</select> <button class="btn secondary" type="submit">Switch Role</button>';
+echo '</form></div>';
 echo '</div>';
 echo '<div class="card">';
 echo '<h3>Key Metrics</h3>';

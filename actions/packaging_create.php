@@ -7,7 +7,7 @@ if (!$user || $user['role'] !== 'admin') { header('Location: /index.php?page=das
 $name = trim($_POST['name'] ?? '');
 if (!$name) { header('Location: /index.php?page=admin'); exit; }
 $pdo = DB::conn();
-$stmt = $pdo->prepare('INSERT INTO packaging_options(name) VALUES(:name) ON CONFLICT(name) DO NOTHING');
+$stmt = $pdo->prepare('INSERT IGNORE INTO packaging_options(name) VALUES(:name)');
 $stmt->execute([':name'=>$name]);
 header('Location: /index.php?page=admin');
 ?>

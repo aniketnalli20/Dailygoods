@@ -8,6 +8,10 @@ class Auth {
         $stmt = $pdo->prepare('SELECT id,name,email,role FROM users WHERE id = :id');
         $stmt->execute([':id' => $_SESSION['user_id']]);
         $u = $stmt->fetch();
+        if ($u && isset($_SESSION['role_override']) && $u['role'] === 'admin') {
+            $ov = $_SESSION['role_override'];
+            if (in_array($ov, ['admin','vendor','customer'])) { $u['role'] = $ov; }
+        }
         return $u ?: null;
     }
 
