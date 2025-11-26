@@ -7,7 +7,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 $user = Auth::currentUser();
 
 if ($page === 'home') {
-    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Milkride</title><link rel="stylesheet" href="/styles.css"></head><body>';
+    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Milkride</title><link rel="stylesheet" href="styles.css"></head><body>';
     echo '<div class="container">';
     echo '<h1>Milkride</h1>';
     echo '<p>Subscribe to fresh milk and add-ons with flexible delivery.</p>';
