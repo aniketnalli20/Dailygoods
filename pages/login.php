@@ -23,7 +23,7 @@ echo '</head><body>';
 echo '<div class="login-wrap">';
 echo '<div class="left">';
 echo '<div class="card">';
-echo '<div class="brand">Milkride</div>';
+echo '<div class="brand">Dailygoods</div>';
 echo '<h2>Welcome back</h2>';
 echo '<p class="muted">Please enter your details</p>';
 echo '<form method="post" action="actions/login.php">';
