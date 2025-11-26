@@ -87,5 +87,17 @@ foreach ($packaging as $pk) {
     echo '</div>';
 }
 echo '</div>';
+echo '<div class="card">';
+echo '<h3>Import Users (usersdg.tsv)</h3>';
+if (isset($_GET['imported'])) {
+    $ins = isset($_GET['ins']) ? (int)$_GET['ins'] : 0;
+    $upd = isset($_GET['upd']) ? (int)$_GET['upd'] : 0;
+    echo '<p>Imported. Inserted: ' . $ins . ' Updated: ' . $upd . '</p>';
+}
+echo '<form method="post" action="actions/import_usersdg.php">';
+echo '<p>This reads <code>pages/usersdg.tsv</code> with columns: <code>name</code>, <code>email</code>, <code>phone</code>, <code>password</code>, <code>role</code>. Missing fields auto-filled.</p>';
+echo '<button class="btn" type="submit">Run Import</button>';
+echo '</form>';
+echo '</div>';
 echo '</body></html>';
 ?>
