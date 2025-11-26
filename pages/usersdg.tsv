@@ -1,1 +1,4 @@
-name\temail\tphone\tpassword\trole
+name	email	phone	password	role
+Dailygoods Admin	admin@dailygoods.local	9999999999	demo1234	admin
+Dailygoods Vendor	vendor@dailygoods.local	8888888888	demo1234	vendor
+Dailygoods Customer	customer@dailygoods.local	7777777777	demo1234	customer
