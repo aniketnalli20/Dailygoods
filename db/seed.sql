@@ -17,3 +17,10 @@ INSERT INTO products(name,type,milk_type,unit,default_unit_qty,price,active) VAL
 ('Yogurt 400g','addon',NULL,'g',400,90,true),
 ('Ghee 500ml','addon',NULL,'ml',500,450,true)
 ON CONFLICT DO NOTHING;
+
+-- Demo users for quick testing
+INSERT INTO users(name,email,phone,password_hash,role) VALUES
+('Demo Admin','admin@demo.local','9999999999','$2y$10$wlKBnl85nkHV0mYmNCsHueQ/b2bHIH8vxdkCIvmv4A2YqTg6WoBy2','admin'),
+('Demo Vendor','vendor@demo.local','8888888888','$2y$10$duUkGgvaeUCV7bEZ0bMBDuDAYAJMEEzLkqIYuTk/bV4PccpMozPFy','vendor'),
+('Demo Customer','customer@demo.local','7777777777','$2y$10$nbCoz.7L3pn5vmo0alYaQOBQtZxyoU0Xw4cTA9YzXJ2GQjqnnQIQe','customer')
+ON CONFLICT (email) DO NOTHING;
