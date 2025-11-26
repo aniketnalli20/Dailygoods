@@ -9,11 +9,11 @@ $stmt->execute([':uid' => $user['id']]);
 $sub = $stmt->fetch();
 $products = $pdo->query('SELECT id,name,type,milk_type,unit,default_unit_qty,price FROM products WHERE active = true ORDER BY type,name')->fetchAll();
 $packs = $pdo->query('SELECT id,name FROM packaging_options ORDER BY id')->fetchAll();
-echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title><link rel="stylesheet" href="/styles.css"></head><body>';
+echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title><link rel="stylesheet" href="styles.css"></head><body>';
 echo '<div class="container">';
 echo '<div class="topbar">';
 echo '<h2>Welcome, ' . htmlspecialchars($user['name']) . '</h2>';
-echo '<form method="post" action="/actions/logout.php"><button class="btn secondary" type="submit">Logout</button></form>';
+echo '<form method="post" action="actions/logout.php"><button class="btn secondary" type="submit">Logout</button></form>';
 echo '</div>';
 if ($sub) {
     echo '<div class="card">';
@@ -21,7 +21,7 @@ if ($sub) {
     echo '<p>Status: ' . htmlspecialchars($sub['status']) . '</p>';
     echo '<p>Plan: ' . htmlspecialchars($sub['plan']) . ' | Frequency: ' . htmlspecialchars($sub['frequency']) . '</p>';
     if ($sub['line1']) echo '<p>Address: ' . htmlspecialchars($sub['line1']) . ', ' . htmlspecialchars($sub['city']) . ' ' . htmlspecialchars($sub['pincode']) . '</p>';
-    echo '<form method="post" action="/actions/pause_resume.php">';
+    echo '<form method="post" action="actions/pause_resume.php">';
     if ($sub['status'] === 'active') {
         echo '<input type="hidden" name="action" value="pause" />';
         echo '<label>Pause until</label><input type="date" name="paused_until" required />';
@@ -32,7 +32,7 @@ if ($sub) {
     }
     echo '</form>';
     echo '<h4>Update Subscription</h4>';
-    echo '<form method="post" action="/actions/update_subscription.php">';
+    echo '<form method="post" action="actions/update_subscription.php">';
     echo '<input type="hidden" name="subscription_id" value="' . (int)$sub['id'] . '" />';
     echo '<label>Plan</label><select name="plan"><option value="monthly"' . ($sub['plan']==='monthly'?' selected':'') . '>Monthly</option><option value="pay_per_delivery"' . ($sub['plan']==='pay_per_delivery'?' selected':'') . '>Pay per Delivery</option></select>';
     echo '<label>Frequency</label><select name="frequency"><option value="daily"' . ($sub['frequency']==='daily'?' selected':'') . '>Daily</option><option value="alternate"' . ($sub['frequency']==='alternate'?' selected':'') . '>Alternate-day</option><option value="weekly"' . ($sub['frequency']==='weekly'?' selected':'') . '>Weekly</option></select>';
@@ -65,7 +65,7 @@ if ($sub) {
 } else {
     echo '<div class="card">';
     echo '<h3>Create Subscription</h3>';
-    echo '<form method="post" action="/actions/create_subscription.php">';
+    echo '<form method="post" action="actions/create_subscription.php">';
     echo '<label>Plan</label><select name="plan"><option value="monthly">Monthly</option><option value="pay_per_delivery">Pay per Delivery</option></select>';
     echo '<label>Frequency</label><select name="frequency"><option value="daily">Daily</option><option value="alternate">Alternate-day</option><option value="weekly">Weekly</option></select>';
     echo '<fieldset><legend>Delivery Address</legend>';
