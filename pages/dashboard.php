@@ -15,9 +15,10 @@ if ($selectedSid) {
 $products = $pdo->query('SELECT id,name,type,milk_type,unit,default_unit_qty,price FROM products WHERE active = 1 ORDER BY type,name')->fetchAll();
 $packs = $pdo->query('SELECT id,name FROM packaging_options ORDER BY id')->fetchAll();
 echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title><link rel="icon" href="https://img.icons8.com/ios-filled/50/laguardia.png"><link rel="stylesheet" href="styles.css"></head><body>';
-echo '<div class="container">';
-echo '<div class="topbar">';
-echo '<h2>Welcome, ' . htmlspecialchars($user['name']) . '</h2>';
+echo '<div class="shell">';
+echo '<div class="header">';
+echo '<div class="logo"><img class="brand-logo" src="https://img.icons8.com/ios-filled/50/6d28d9/laguardia.png" alt="Logo" />Dailygoods</div>';
+echo '<div class="search"><img src="https://img.icons8.com/ios-glyphs/24/search--v1.png" alt="" /><input type="text" placeholder="Search products in your plan..." /></div>';
 echo '<div>';
 if ($user['role'] === 'admin') echo '<a class="btn secondary" href="index.php?page=admin">Admin</a> ';
 if (in_array($user['role'], ['vendor','admin'])) echo '<a class="btn secondary" href="index.php?page=vendor">Vendor</a> ';
@@ -86,6 +87,27 @@ if ($sub) {
     echo '</div>';
     echo '<button class="btn" type="submit">Save Changes</button>';
     echo '</form>';
+    echo '</div>';
+    echo '<h3 style="margin-top:16px">Add Items</h3>';
+    echo '<div class="grid">';
+    foreach ($products as $p) {
+        $img = ($p['type']==='milk') ? 'https://img.icons8.com/fluency/96/milk-bottle.png' : 'https://img.icons8.com/fluency/96/shopping-basket.png';
+        echo '<div class="card shop">';
+        echo '<img src="'.$img.'" alt="" />';
+        echo '<div class="name">'.htmlspecialchars($p['name']).'</div>';
+        echo '<div class="meta">'.htmlspecialchars(strtoupper($p['type'])).'</div>';
+        echo '<div class="price">₹'.number_format((float)$p['price'],2).'</div>';
+        echo '<form method="post" action="actions/add_item.php">';
+        echo '<input type="hidden" name="subscription_id" value="'.(int)$sub['id'].'" />';
+        echo '<input type="hidden" name="product_id" value="'.(int)$p['id'].'" />';
+        echo '<label>Packaging</label><select name="packaging_option_id">';
+        foreach ($packs as $pk) { echo '<option value="'.$pk['id'].'">'.htmlspecialchars($pk['name']).'</option>'; }
+        echo '</select>';
+        echo '<label>Qty</label><input type="number" step="0.1" min="0.1" name="quantity" />';
+        echo '<button class="btn add" type="submit">Add to Subscription</button>';
+        echo '</form>';
+        echo '</div>';
+    }
     echo '</div>';
     // Delivery calendar
     $monthParam = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
