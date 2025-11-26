@@ -98,6 +98,10 @@ echo '<form method="post" action="actions/import_usersdg.php">';
 echo '<p>This reads <code>pages/usersdg.tsv</code> with columns: <code>name</code>, <code>email</code>, <code>phone</code>, <code>password</code>, <code>role</code>. Missing fields auto-filled.</p>';
 echo '<button class="btn" type="submit">Run Import</button>';
 echo '</form>';
+echo '<form method="get" action="actions/enrich_usersdg.php" style="margin-top:8px">';
+echo '<input type="hidden" name="import" value="1" />';
+echo '<button class="btn secondary" type="submit">Enrich TSV (emails/phones/passwords) + Import</button>';
+echo '</form>';
 echo '</div>';
 echo '</body></html>';
 ?>
