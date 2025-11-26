@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe8ff"/>
+      <stop offset="1" stop-color="#eaf6ff"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9f6a5"/>
+      <stop offset="1" stop-color="#8ee08a"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="320" fill="url(#sky)"/>
+  <rect y="320" width="640" height="160" fill="url(#grass)"/>
+  <circle cx="110" cy="90" r="30" fill="#fff8c2"/>
+  <g transform="translate(240,120)">
+    <path d="M80 0 h40 l10 15 v90 a30 30 0 01-30 30 h-0 a30 30 0 01-30-30 v-90 z" fill="#f6f7fb" stroke="#cbd5e1" stroke-width="4"/>
+    <rect x="85" y="30" width="30" height="10" rx="5" fill="#cbd5e1"/>
+    <rect x="70" y="60" width="60" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+    <text x="100" y="86" font-family="Inter, Arial, sans-serif" font-size="16" text-anchor="middle" fill="#111827">Fresh Milk</text>
+  </g>
+  <g transform="translate(110,300) scale(1.1)">
+    <rect x="-30" y="0" width="180" height="55" rx="28" fill="#6d28d9"/>
+    <text x="60" y="36" font-family="Inter, Arial, sans-serif" font-size="20" text-anchor="middle" fill="#ffffff">Dailygoods</text>
+  </g>
+</svg>

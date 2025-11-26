@@ -22,7 +22,20 @@ echo '<div class="actions"><span>Don\'t have an account?</span> <a class="link" 
 echo '</div>';
 echo '</div>';
 echo '<div class="auth-right">';
-$img = (defined('CDN_BASE_URL') && CDN_BASE_URL) ? (rtrim(CDN_BASE_URL,'/') . '/login-hero.jpg') : 'assets/images/login-hero.jpg';
+$img = null;
+if (defined('CDN_BASE_URL') && CDN_BASE_URL) {
+    $img = rtrim(CDN_BASE_URL,'/') . '/login-hero.jpg';
+} else {
+    $localJpg = __DIR__ . '/../assets/images/login-hero.jpg';
+    $localSvg = __DIR__ . '/../assets/images/login-hero.svg';
+    if (file_exists($localJpg)) {
+        $img = 'assets/images/login-hero.jpg';
+    } else if (file_exists($localSvg)) {
+        $img = 'assets/images/login-hero.svg';
+    } else {
+        $img = 'assets/images/login-hero.svg';
+    }
+}
 echo '<img class="auth-illustration" src="' . $img . '" alt="Dailygoods - Fresh Milk" />';
 echo '</div>';
 echo '</div>';
