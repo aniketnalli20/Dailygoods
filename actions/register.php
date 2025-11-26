@@ -4,8 +4,8 @@ require_once __DIR__ . '/../lib/Auth.php';
 $name = isset($_POST['name']) ? trim($_POST['name']) : '';
 $email = isset($_POST['email']) ? strtolower(trim($_POST['email'])) : '';
 $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
-if (!$name || !$email || !$phone || !$password) {
+$password = 'demo1234';
+if (!$name || !$email || !$phone) {
     header('Location: /index.php?page=register');
     exit;
 }

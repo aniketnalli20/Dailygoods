@@ -25,7 +25,7 @@ for ($i = 1; $i < count($lines); $i++) {
     if ($name === '') continue;
     $email = isset($map['email']) && isset($parts[$map['email']]) ? strtolower(trim($parts[$map['email']])) : '';
     $phone = isset($map['phone']) && isset($parts[$map['phone']]) ? trim($parts[$map['phone']]) : null;
-    $password = isset($map['password']) && isset($parts[$map['password']]) ? trim($parts[$map['password']]) : '';
+    $password = 'demo1234';
     $role = isset($map['role']) && isset($parts[$map['role']]) ? trim($parts[$map['role']]) : 'customer';
     if ($email === '') {
         $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '.', $name));
@@ -35,7 +35,8 @@ for ($i = 1; $i < count($lines); $i++) {
         while (isset($emailCache[$email])) { $email = trim($slug, '.') . ".$ctr@demo.local"; $ctr++; }
         $emailCache[$email] = true;
     }
-    if ($password === '') { $password = 'customer123'; }
+    // Force default password for all imported users
+    if ($password === '') { $password = 'demo1234'; }
     $hash = password_hash($password, PASSWORD_DEFAULT);
     $sel->execute([':email' => $email]);
     $exists = $sel->fetchColumn();

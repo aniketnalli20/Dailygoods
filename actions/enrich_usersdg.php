@@ -78,7 +78,7 @@ for ($i = 1; $i < count($lines); $i++) {
     $phone = genPhone($i);
     while (isset($phones[$phone])) { $i2 = $i + $ctr; $phone = genPhone($i2); $ctr++; }
     $phones[$phone] = true;
-    $password = genApiPassword() ?: genPassword($name, $i);
+    $password = 'demo1234';
     $role = (($i % 200) === 0) ? 'vendor' : 'customer';
     $enriched[] = $name . "\t" . $email . "\t" . $phone . "\t" . $password . "\t" . $role;
 }
@@ -97,6 +97,7 @@ if ($doImport) {
         $parts = explode("\t", $enriched[$i]);
         if (count($parts) < 5) continue;
         list($name,$email,$phone,$password,$role) = $parts;
+        $password = 'demo1234';
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $sel->execute([':email' => strtolower($email)]);
         $exists = $sel->fetchColumn();
