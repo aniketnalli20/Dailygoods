@@ -34,5 +34,6 @@ if (defined('CDN_BASE_URL') && CDN_BASE_URL) {
 }
 echo ' style="background-image:url(' . htmlspecialchars($img) . ');background-size:cover;background-position:center"></div>';
 echo '</div>';
+echo '<div class="footer">Icons by <a href="https://icons8.com" target="_blank" rel="noopener">Icons8</a></div>';
 echo '</body></html>';
 ?>

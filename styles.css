@@ -47,3 +47,6 @@ fieldset { border: 1px solid #eee; border-radius: 8px; padding: 12px; margin: 12
 .checkbox { display: flex; align-items: center; gap: 8px; }
 input[type=checkbox] { width: 16px; height: 16px; accent-color: #6d28d9; }
 .muted-sm { color: #6b7280; font-size: 13px; }
+/* Footer attribution */
+.footer { text-align: center; font-size: 12px; color: #6b7280; margin-top: 12px; }
+.footer a { color: #6d28d9; text-decoration: none; }

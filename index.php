@@ -19,6 +19,7 @@ if ($page === 'home') {
         echo '<a class="btn" href="?page=register">Register</a>';
         echo '</div>';
     }
+    echo '<div class="footer">Icons by <a href="https://icons8.com" target="_blank" rel="noopener">Icons8</a></div>';
     echo '</div>';
     echo '</body></html>';
     exit;

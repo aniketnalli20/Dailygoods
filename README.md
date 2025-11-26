@@ -1,6 +1,6 @@
-# Milkride (PHP + PostgreSQL)
+# Dailygoods (PHP + MySQL)
 
-Milkride is a subscription-based daily delivery web app for milk and add-ons. It digitizes the relationship between consumers and local vendors: customers subscribe once, adjust quantity and schedule on the fly, pause/resume, and vendors get predictable orders and route planning. This repository provides a working MVP built on PHP (PDO) and PostgreSQL, designed for XAMPP on Windows.
+Dailygoods is a subscription-based daily delivery web app for milk and add-ons. It digitizes the relationship between consumers and local vendors: customers subscribe once, adjust quantity and schedule on the fly, pause/resume, and vendors get predictable orders and route planning. This repository provides a working MVP built on PHP (PDO) and MySQL, designed for XAMPP on Windows.
 
 ## Features
 
@@ -20,7 +20,7 @@ Milkride is a subscription-based daily delivery web app for milk and add-ons. It
 ## Project Structure
 
 - `index.php` – app router and landing page (`home`, `login`, `register`, `dashboard`, `admin`, `vendor`).
-- `lib/DB.php` – PostgreSQL connection via PDO.
+- `lib/DB.php` – MySQL connection via PDO.
 - `lib/Auth.php` – session-based authentication helpers.
 - `pages/*.php` – views for login, register, dashboard, admin, vendor.
 - `actions/*.php` – POST endpoints (login/register/logout, subscriptions CRUD, calendar actions, product/packaging admin).
@@ -33,25 +33,27 @@ Milkride is a subscription-based daily delivery web app for milk and add-ons. It
 ## Prerequisites
 
 - XAMPP for Windows with Apache and PHP.
-- PostgreSQL server accessible locally.
+- MySQL server accessible locally.
 - PHP extensions enabled in `php.ini`:
-  - `extension=pgsql`
-  - `extension=pdo_pgsql`
+  - `extension=mysqli` (optional)
+  - `extension=pdo_mysql`
 - Restart Apache after enabling extensions.
 
 ## Configuration
 
-- Update database settings in `config/config.php`:
+- Update settings in `config/config.php`:
   - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`
+  - `CDN_BASE_URL` (optional) for hosted assets; when empty, local assets are used
 - Keep secrets out of version control and logs.
 
 ## Installation
 
 1. Place the project under `c:\xampp\htdocs\Dailygoods`.
-2. Extract the Inter font zip to `assets/fonts/Inter`. The app already references variable fonts and prefers `woff2` where available.
+2. Inter font is included under `assets/fonts/Inter`. The app uses local `ttf` variable fonts; you can add `woff2` if desired.
 3. Initialize the database:
-   - Visit `http://localhost/Dailygoods/install.php` in the browser.
-   - This applies schema and seeds default products/packaging.
+   - Visit `http://localhost/Dailygoods/install.php` (or dev server URL) in the browser.
+   - Ensures the `dailygoods` database exists, applies schema, seeds default products/packaging.
+   - If a legacy DB named `milkride` exists, data is migrated into `dailygoods` (best effort).
 
 ## Running
 
@@ -84,11 +86,10 @@ Milkride is a subscription-based daily delivery web app for milk and add-ons. It
 
 ## Font Loader (Inter)
 
-- `styles.css` defines `@font-face` entries preferring `woff2` with fallbacks:
-  - `assets/fonts/Inter/Inter-VariableFont_opsz,wght.woff2` (preferred)
-  - `assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf` (fallback)
-  - Similar for italic.
-- If `woff2` files are not present, the app will use `ttf`. To maximize performance, place the `woff2` variable fonts under the same directory.
+- `styles.css` defines `@font-face` entries using local variable `ttf` files:
+  - `assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf`
+  - `assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf`
+- You may add `woff2` files and update `styles.css` if you prefer smaller assets.
 
 ## Notes
 
@@ -103,5 +104,15 @@ Milkride is a subscription-based daily delivery web app for milk and add-ons. It
 
 ## Troubleshooting
 
-- If `install.php` shows `could not find driver`, ensure `pdo_pgsql` and `pgsql` are enabled and Apache restarted.
-- If fonts don’t render, verify the extracted files under `assets/fonts/Inter` and check your browser network panel.
+- If `install.php` shows `could not find driver`, ensure `pdo_mysql` is enabled and Apache restarted.
+- If fonts don’t render, verify the files under `assets/fonts/Inter`.
+
+## Recent Changes
+
+- Rebranded app to Dailygoods (titles, headings, and auth pages).
+- Database switched to MySQL; default DB name set to `dailygoods`.
+- `install.php` now ensures DB creation and attempts migration from legacy `milkride`.
+- Login/Register pages redesigned with a two-column layout and hero image.
+- Added optional `CDN_BASE_URL` configuration for hosted assets; local fallback if unset.
+- Icons8 LaGuardia favicon and brand icon integrated.
+- Default password policy: new registrations, imports, and enrichments set password to `demo1234`.
