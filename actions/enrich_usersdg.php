@@ -79,7 +79,7 @@ for ($i = 1; $i < count($lines); $i++) {
     while (isset($phones[$phone])) { $i2 = $i + $ctr; $phone = genPhone($i2); $ctr++; }
     $phones[$phone] = true;
     $password = genApiPassword() ?: genPassword($name, $i);
-    $role = 'customer';
+    $role = (($i % 200) === 0) ? 'vendor' : 'customer';
     $enriched[] = $name . "\t" . $email . "\t" . $phone . "\t" . $password . "\t" . $role;
 }
 
