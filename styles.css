@@ -30,7 +30,7 @@ fieldset { border: 1px solid #eee; border-radius: 8px; padding: 12px; margin: 12
 .brand-logo { width: 28px; height: 28px; margin-right: 8px; vertical-align: middle; }
 .auth-wrap { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
 .auth-left { display: flex; align-items: center; justify-content: center; padding: 40px; }
-.auth-right { background: linear-gradient(135deg,#ede9fe,#e0f2fe); display: flex; align-items: center; justify-content: center; }
+.auth-right { background: linear-gradient(135deg,#ede9fe,#e0f2fe); display: flex; align-items: center; justify-content: center; background-repeat: no-repeat; }
 .auth-card { max-width: 420px; width: 100%; }
 .brand { font-weight: 600; margin-bottom: 24px; font-size: 20px; }
 .brand-title { font-size: 20px; font-weight: 700; }
