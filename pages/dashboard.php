@@ -14,7 +14,7 @@ if ($selectedSid) {
 }
 $products = $pdo->query('SELECT id,name,type,milk_type,unit,default_unit_qty,price FROM products WHERE active = 1 ORDER BY type,name')->fetchAll();
 $packs = $pdo->query('SELECT id,name FROM packaging_options ORDER BY id')->fetchAll();
-echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title><link rel="stylesheet" href="styles.css"></head><body>';
+echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title><link rel="icon" href="https://img.icons8.com/ios-filled/50/laguardia.png"><link rel="stylesheet" href="styles.css"></head><body>';
 echo '<div class="container">';
 echo '<div class="topbar">';
 echo '<h2>Welcome, ' . htmlspecialchars($user['name']) . '</h2>';

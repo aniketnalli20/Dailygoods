@@ -13,7 +13,7 @@ $freqDist = $pdo->query("SELECT frequency, COUNT(*) AS c FROM subscriptions GROU
 $popular = $pdo->query("SELECT p.name, SUM(si.quantity) AS qty FROM subscription_items si JOIN products p ON si.product_id = p.id GROUP BY p.name ORDER BY qty DESC LIMIT 10")->fetchAll();
 $products = $pdo->query("SELECT * FROM products ORDER BY type, name")->fetchAll();
 $packaging = $pdo->query("SELECT * FROM packaging_options ORDER BY id")->fetchAll();
-echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Admin</title><link rel="stylesheet" href="styles.css"></head><body>';
+echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Admin</title><link rel="icon" href="https://img.icons8.com/ios-filled/50/laguardia.png"><link rel="stylesheet" href="styles.css"></head><body>';
 echo '<div class="container">';
 echo '<div class="topbar">';
 echo '<h2>Admin Dashboard</h2>';

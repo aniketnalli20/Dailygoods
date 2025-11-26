@@ -45,7 +45,7 @@ foreach ($deliverToday as $s) {
     $c = $coordStmt->fetch();
     $manifest[$key][] = ['address'=>$s['line1'], 'items'=>$final, 'lat'=>($c['lat'] ?? null), 'lng'=>($c['lng'] ?? null)];
 }
-echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Vendor</title><link rel="stylesheet" href="styles.css"></head><body>';
+echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Vendor</title><link rel="icon" href="https://img.icons8.com/ios-filled/50/laguardia.png"><link rel="stylesheet" href="styles.css"></head><body>';
 echo '<div class="container">';
 echo '<div class="topbar">';
 echo '<h2>Delivery Manifest</h2>';
