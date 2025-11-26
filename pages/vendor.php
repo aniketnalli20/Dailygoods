@@ -65,6 +65,22 @@ foreach ($manifest as $zone => $rows) {
 }
 if (!$manifest) echo '<p>No deliveries scheduled today.</p>';
 echo '</div>';
+// Vendor product upload
+if (in_array($user['role'], ['vendor','admin'])) {
+    echo '<div class="card">';
+    echo '<h3>Upload Product to Feed</h3>';
+    echo '<p>New items uploaded by vendors are hidden until an admin activates them.</p>';
+    echo '<form method="post" action="actions/products_create_vendor.php">';
+    echo '<label>Name</label><input type="text" name="name" required />';
+    echo '<label>Type</label><select name="type"><option value="milk">milk</option><option value="addon">addon</option></select>';
+    echo '<label>Milk Type</label><input type="text" name="milk_type" placeholder="whole/skim/organic/A2/flavored" />';
+    echo '<label>Unit</label><input type="text" name="unit" placeholder="L/ml/g/unit" required />';
+    echo '<label>Default Unit Qty</label><input type="number" name="default_unit_qty" required />';
+    echo '<label>Price</label><input type="number" step="0.01" name="price" required />';
+    echo '<button class="btn" type="submit">Upload</button>';
+    echo '</form>';
+    echo '</div>';
+}
 // Map view card
 echo '<div class="card">';
 echo '<h3>Map View</h3>';
