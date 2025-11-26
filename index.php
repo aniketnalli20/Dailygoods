@@ -9,7 +9,7 @@ $user = Auth::currentUser();
 if ($page === 'home') {
     echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dailygoods</title><link rel="icon" href="https://img.icons8.com/ios-filled/50/laguardia.png"><link rel="stylesheet" href="styles.css"></head><body>';
     echo '<div class="container">';
-    echo '<h1><img class="brand-logo" src="https://img.icons8.com/ios-filled/50/6d28d9/laguardia.png" alt="Logo" />Dailygoods</h1>';
+    echo '<h1 class="brand-title"><img class="brand-logo" src="https://img.icons8.com/ios-filled/50/6d28d9/laguardia.png" alt="Logo" />Dailygoods</h1>';
     echo '<p>Subscribe to fresh milk and add-ons with flexible delivery.</p>';
     if ($user) {
         echo '<a class="btn" href="?page=dashboard">Go to Dashboard</a>';
