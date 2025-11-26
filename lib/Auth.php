@@ -25,11 +25,11 @@ class Auth {
     public static function register(string $name, string $email, string $phone, string $password): ?int {
         $pdo = DB::conn();
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare('INSERT INTO users(name,email,phone,password_hash,role) VALUES(:name,:email,:phone,:hash,:role) RETURNING id');
+        $stmt = $pdo->prepare('INSERT INTO users(name,email,phone,password_hash,role) VALUES(:name,:email,:phone,:hash,:role)');
         try {
             $stmt->execute([':name' => $name, ':email' => $email, ':phone' => $phone, ':hash' => $hash, ':role' => 'customer']);
-            $id = $stmt->fetchColumn();
-            return $id ? (int)$id : null;
+            $id = (int)$pdo->lastInsertId();
+            return $id ?: null;
         } catch (PDOException $e) {
             return null;
         }

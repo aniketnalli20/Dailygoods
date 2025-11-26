@@ -16,12 +16,12 @@ if (!$line1 || !$city || !$pincode) { header('Location: /index.php?page=dashboar
 $pdo = DB::conn();
 $pdo->beginTransaction();
 try {
-    $addrStmt = $pdo->prepare('INSERT INTO addresses(user_id,line1,city,pincode,lat,lng) VALUES(:uid,:line1,:city,:pincode,:lat,:lng) RETURNING id');
+    $addrStmt = $pdo->prepare('INSERT INTO addresses(user_id,line1,city,pincode,lat,lng) VALUES(:uid,:line1,:city,:pincode,:lat,:lng)');
     $addrStmt->execute([':uid'=>$user['id'], ':line1'=>$line1, ':city'=>$city, ':pincode'=>$pincode, ':lat'=>$lat, ':lng'=>$lng]);
-    $address_id = (int)$addrStmt->fetchColumn();
-    $subStmt = $pdo->prepare('INSERT INTO subscriptions(user_id,address_id,plan,frequency,status,start_date) VALUES(:uid,:addr,:plan,:freq,:status,current_date) RETURNING id');
+    $address_id = (int)$pdo->lastInsertId();
+    $subStmt = $pdo->prepare('INSERT INTO subscriptions(user_id,address_id,plan,frequency,status,start_date) VALUES(:uid,:addr,:plan,:freq,:status,CURDATE())');
     $subStmt->execute([':uid'=>$user['id'], ':addr'=>$address_id, ':plan'=>$plan, ':freq'=>$frequency, ':status'=>'active']);
-    $sid = (int)$subStmt->fetchColumn();
+    $sid = (int)$pdo->lastInsertId();
     $priceStmt = $pdo->prepare('SELECT price FROM products WHERE id = :pid');
     $insItem = $pdo->prepare('INSERT INTO subscription_items(subscription_id,product_id,packaging_option_id,quantity,unit_price,total_price) VALUES(:sid,:pid,:pack,:qty,:unit,:total)');
     foreach ($items as $it) {

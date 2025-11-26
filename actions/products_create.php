@@ -12,7 +12,7 @@ $default_unit_qty = (int)($_POST['default_unit_qty'] ?? 0);
 $price = (float)($_POST['price'] ?? 0);
 if (!$name || !$type || !$unit || !$default_unit_qty || !$price) { header('Location: /index.php?page=admin'); exit; }
 $pdo = DB::conn();
-$stmt = $pdo->prepare('INSERT INTO products(name,type,milk_type,unit,default_unit_qty,price,active) VALUES(:name,:type,:milk,:unit,:qty,:price,true)');
+$stmt = $pdo->prepare('INSERT INTO products(name,type,milk_type,unit,default_unit_qty,price,active) VALUES(:name,:type,:milk,:unit,:qty,:price,1)');
 $stmt->execute([':name'=>$name, ':type'=>$type, ':milk'=>$milk_type, ':unit'=>$unit, ':qty'=>$default_unit_qty, ':price'=>$price]);
 header('Location: /index.php?page=admin');
 ?>

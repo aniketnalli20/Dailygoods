@@ -12,7 +12,7 @@ if ($selectedSid) {
     foreach ($subs as $s) { if ((int)$s['id'] === $selectedSid) { $sub = $s; break; } }
     if (!$sub) { $sub = $subs[0] ?? null; $selectedSid = $sub ? (int)$sub['id'] : 0; }
 }
-$products = $pdo->query('SELECT id,name,type,milk_type,unit,default_unit_qty,price FROM products WHERE active = true ORDER BY type,name')->fetchAll();
+$products = $pdo->query('SELECT id,name,type,milk_type,unit,default_unit_qty,price FROM products WHERE active = 1 ORDER BY type,name')->fetchAll();
 $packs = $pdo->query('SELECT id,name FROM packaging_options ORDER BY id')->fetchAll();
 echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title><link rel="stylesheet" href="styles.css"></head><body>';
 echo '<div class="container">';

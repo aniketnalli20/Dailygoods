@@ -1,79 +1,89 @@
 CREATE TABLE IF NOT EXISTS users (
-  id serial PRIMARY KEY,
-  name text NOT NULL,
-  email text UNIQUE NOT NULL,
-  phone text,
-  password_hash text NOT NULL,
-  role text NOT NULL DEFAULT 'customer',
-  created_at timestamp NOT NULL DEFAULT now()
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name TEXT NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  phone TEXT,
+  password_hash TEXT NOT NULL,
+  role VARCHAR(50) NOT NULL DEFAULT 'customer',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS addresses (
-  id serial PRIMARY KEY,
-  user_id int REFERENCES users(id) ON DELETE CASCADE,
-  line1 text NOT NULL,
-  line2 text,
-  city text NOT NULL,
-  state text,
-  pincode text NOT NULL,
-  lat double precision,
-  lng double precision
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  line1 TEXT NOT NULL,
+  line2 TEXT,
+  city TEXT NOT NULL,
+  state TEXT,
+  pincode TEXT NOT NULL,
+  lat DOUBLE,
+  lng DOUBLE,
+  CONSTRAINT fk_addresses_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS packaging_options (
-  id serial PRIMARY KEY,
-  name text UNIQUE NOT NULL
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS products (
-  id serial PRIMARY KEY,
-  name text NOT NULL,
-  type text NOT NULL,
-  milk_type text,
-  unit text NOT NULL,
-  default_unit_qty integer,
-  price numeric(10,2) NOT NULL,
-  active boolean NOT NULL DEFAULT true
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name TEXT NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  milk_type VARCHAR(50),
+  unit VARCHAR(20) NOT NULL,
+  default_unit_qty INT,
+  price DECIMAL(10,2) NOT NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS subscriptions (
-  id serial PRIMARY KEY,
-  user_id int REFERENCES users(id) ON DELETE CASCADE,
-  address_id int REFERENCES addresses(id) ON DELETE SET NULL,
-  plan text NOT NULL,
-  frequency text NOT NULL,
-  status text NOT NULL DEFAULT 'active',
-  start_date date NOT NULL DEFAULT current_date,
-  paused_until date,
-  wallet_balance numeric(10,2) NOT NULL DEFAULT 0
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  address_id INT,
+  plan VARCHAR(50) NOT NULL,
+  frequency VARCHAR(50) NOT NULL,
+  status VARCHAR(50) NOT NULL DEFAULT 'active',
+  start_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+  paused_until DATE,
+  wallet_balance DECIMAL(10,2) NOT NULL DEFAULT 0,
+  CONSTRAINT fk_subscriptions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_subscriptions_address FOREIGN KEY (address_id) REFERENCES addresses(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS subscription_items (
-  id serial PRIMARY KEY,
-  subscription_id int REFERENCES subscriptions(id) ON DELETE CASCADE,
-  product_id int REFERENCES products(id) ON DELETE RESTRICT,
-  packaging_option_id int REFERENCES packaging_options(id) ON DELETE RESTRICT,
-  quantity numeric(10,2) NOT NULL,
-  unit_price numeric(10,2) NOT NULL,
-  total_price numeric(10,2) NOT NULL
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subscription_id INT,
+  product_id INT,
+  packaging_option_id INT,
+  quantity DECIMAL(10,2) NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL,
+  total_price DECIMAL(10,2) NOT NULL,
+  CONSTRAINT fk_items_subscription FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE CASCADE,
+  CONSTRAINT fk_items_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_items_packaging FOREIGN KEY (packaging_option_id) REFERENCES packaging_options(id) ON DELETE RESTRICT
 );
 
 -- Delivery calendar per subscription
 CREATE TABLE IF NOT EXISTS delivery_dates (
-  id serial PRIMARY KEY,
-  subscription_id int REFERENCES subscriptions(id) ON DELETE CASCADE,
-  delivery_date date NOT NULL,
-  status text NOT NULL DEFAULT 'scheduled', -- scheduled | holiday | skipped
-  note text,
-  UNIQUE(subscription_id, delivery_date)
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subscription_id INT,
+  delivery_date DATE NOT NULL,
+  status VARCHAR(50) NOT NULL DEFAULT 'scheduled',
+  note TEXT,
+  UNIQUE(subscription_id, delivery_date),
+  CONSTRAINT fk_dates_subscription FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS delivery_extras (
-  id serial PRIMARY KEY,
-  subscription_id int REFERENCES subscriptions(id) ON DELETE CASCADE,
-  delivery_date date NOT NULL,
-  product_id int REFERENCES products(id) ON DELETE RESTRICT,
-  packaging_option_id int REFERENCES packaging_options(id) ON DELETE RESTRICT,
-  quantity numeric(10,2) NOT NULL,
-  UNIQUE(subscription_id, delivery_date, product_id, packaging_option_id)
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subscription_id INT,
+  delivery_date DATE NOT NULL,
+  product_id INT,
+  packaging_option_id INT,
+  quantity DECIMAL(10,2) NOT NULL,
+  UNIQUE(subscription_id, delivery_date, product_id, packaging_option_id),
+  CONSTRAINT fk_extras_subscription FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE CASCADE,
+  CONSTRAINT fk_extras_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT,
+  CONSTRAINT fk_extras_packaging FOREIGN KEY (packaging_option_id) REFERENCES packaging_options(id) ON DELETE RESTRICT
 );

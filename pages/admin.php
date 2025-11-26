@@ -4,7 +4,7 @@ require_once __DIR__ . '/../lib/DB.php';
 $user = Auth::currentUser();
 $pdo = DB::conn();
 $totalSubs = (int)$pdo->query("SELECT COUNT(*) FROM subscriptions")->fetchColumn();
-$newSubs = (int)$pdo->query("SELECT COUNT(*) FROM subscriptions WHERE date_trunc('month', start_date) = date_trunc('month', current_date)")->fetchColumn();
+$newSubs = (int)$pdo->query("SELECT COUNT(*) FROM subscriptions WHERE DATE_FORMAT(start_date, '%Y-%m') = DATE_FORMAT(CURDATE(), '%Y-%m')")->fetchColumn();
 $activeSubs = (int)$pdo->query("SELECT COUNT(*) FROM subscriptions WHERE status = 'active'")->fetchColumn();
 $pausedSubs = (int)$pdo->query("SELECT COUNT(*) FROM subscriptions WHERE status = 'paused'")->fetchColumn();
 $customers = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'customer'")->fetchColumn();
