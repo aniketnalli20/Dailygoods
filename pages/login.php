@@ -21,23 +21,18 @@ echo '</form>';
 echo '<div class="actions"><span>Don\'t have an account?</span> <a class="link" href="index.php?page=register">Sign up</a></div>';
 echo '</div>';
 echo '</div>';
-echo '<div class="auth-right">';
+echo '<div class="auth-right"';
 $img = null;
 if (defined('CDN_BASE_URL') && CDN_BASE_URL) {
     $img = rtrim(CDN_BASE_URL,'/') . '/login-hero.jpg';
 } else {
     $localJpg = __DIR__ . '/../assets/images/login-hero.jpg';
     $localSvg = __DIR__ . '/../assets/images/login-hero.svg';
-    if (file_exists($localJpg)) {
-        $img = 'assets/images/login-hero.jpg';
-    } else if (file_exists($localSvg)) {
-        $img = 'assets/images/login-hero.svg';
-    } else {
-        $img = 'assets/images/login-hero.svg';
-    }
+    if (file_exists($localJpg)) { $img = 'assets/images/login-hero.jpg'; }
+    else if (file_exists($localSvg)) { $img = 'assets/images/login-hero.svg'; }
+    else { $img = 'assets/images/login-hero.svg'; }
 }
-echo '<img class="auth-illustration" src="' . $img . '" alt="Dailygoods - Fresh Milk" />';
-echo '</div>';
+echo ' style="background-image:url(' . htmlspecialchars($img) . ');background-size:cover;background-position:center"></div>';
 echo '</div>';
 echo '</body></html>';
 ?>
