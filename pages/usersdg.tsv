@@ -1,3 +1,7 @@
+name	email	phone	password	role
+Demo Admin	admin@demo.local	9999999999	admin123	admin
+Demo Vendor	vendor@demo.local	8888888888	vendor123	vendor
+Demo Customer	customer@demo.local	7777777777	customer123	customer
 name	gender	race
 barjraj	m	indian
 ramdin verma	m	indian
