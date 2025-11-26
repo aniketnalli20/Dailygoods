@@ -1,10 +1,13 @@
 <?php
-session_start();
+$isCli = php_sapi_name() === 'cli';
+if (!$isCli) session_start();
 require_once __DIR__ . '/../lib/Auth.php';
 require_once __DIR__ . '/../lib/DB.php';
-$user = Auth::currentUser();
-if (!$user || $user['role'] !== 'admin') { header('Location: /index.php?page=dashboard'); exit; }
-$path = __DIR__ . '/../pages/usersdg.tsv';
+if (!$isCli) {
+    $user = Auth::currentUser();
+    if (!$user || $user['role'] !== 'admin') { header('Location: /index.php?page=dashboard'); exit; }
+}
+$path = $isCli && isset($argv[1]) ? $argv[1] : (__DIR__ . '/../pages/usersdg.tsv');
 if (!file_exists($path)) { header('Location: /index.php?page=admin'); exit; }
 $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 if (!$lines || count($lines) < 2) { header('Location: /index.php?page=admin'); exit; }
@@ -48,6 +51,10 @@ for ($i = 1; $i < count($lines); $i++) {
         $inserted++;
     }
 }
-header('Location: /index.php?page=admin&imported=1&ins=' . $inserted . '&upd=' . $updated);
+if ($isCli) {
+    echo "Imported TSV. Inserted=$inserted Updated=$updated\n";
+} else {
+    header('Location: /index.php?page=admin&imported=1&ins=' . $inserted . '&upd=' . $updated);
+}
 exit;
 ?>

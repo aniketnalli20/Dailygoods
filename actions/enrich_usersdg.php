@@ -70,16 +70,21 @@ for ($i = 1; $i < count($lines); $i++) {
     $name = isset($map['name']) && isset($parts[$map['name']]) ? trim($parts[$map['name']]) : '';
     if ($name === '' || strtolower($name) === 'name') continue;
     $slug = slugify($name);
-    $emailBase = $slug !== '' ? $slug : ('user' . $i);
-    $email = $emailBase . '@gmail.com';
-    $ctr = 1;
-    while (isset($emails[$email])) { $email = $emailBase . $ctr . '@example.in'; $ctr++; }
+    // Use provided email/phone/role when present; otherwise auto-generate sensible defaults
+    $email = ($hasEmail && isset($parts[$map['email']]) && trim($parts[$map['email']]) !== '') ? strtolower(trim($parts[$map['email']])) : '';
+    if ($email === '') {
+        $emailBase = $slug !== '' ? $slug : ('user' . $i);
+        $email = $emailBase . '@gmail.com';
+        $ctr = 1;
+        while (isset($emails[$email])) { $email = $emailBase . $ctr . '@example.in'; $ctr++; }
+    }
     $emails[$email] = true;
-    $phone = genPhone($i);
+    $phone = ($hasPhone && isset($parts[$map['phone']]) && trim($parts[$map['phone']]) !== '') ? trim($parts[$map['phone']]) : genPhone($i);
+    $ctr = 1;
     while (isset($phones[$phone])) { $i2 = $i + $ctr; $phone = genPhone($i2); $ctr++; }
     $phones[$phone] = true;
     $password = 'demo1234';
-    $role = (($i % 200) === 0) ? 'vendor' : 'customer';
+    $role = ($hasRole && isset($parts[$map['role']]) && trim($parts[$map['role']]) !== '') ? trim($parts[$map['role']]) : ((($i % 200) === 0) ? 'vendor' : 'customer');
     $enriched[] = $name . "\t" . $email . "\t" . $phone . "\t" . $password . "\t" . $role;
 }
 
