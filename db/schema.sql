@@ -57,3 +57,23 @@ CREATE TABLE IF NOT EXISTS subscription_items (
   unit_price numeric(10,2) NOT NULL,
   total_price numeric(10,2) NOT NULL
 );
+
+-- Delivery calendar per subscription
+CREATE TABLE IF NOT EXISTS delivery_dates (
+  id serial PRIMARY KEY,
+  subscription_id int REFERENCES subscriptions(id) ON DELETE CASCADE,
+  delivery_date date NOT NULL,
+  status text NOT NULL DEFAULT 'scheduled', -- scheduled | holiday | skipped
+  note text,
+  UNIQUE(subscription_id, delivery_date)
+);
+
+CREATE TABLE IF NOT EXISTS delivery_extras (
+  id serial PRIMARY KEY,
+  subscription_id int REFERENCES subscriptions(id) ON DELETE CASCADE,
+  delivery_date date NOT NULL,
+  product_id int REFERENCES products(id) ON DELETE RESTRICT,
+  packaging_option_id int REFERENCES packaging_options(id) ON DELETE RESTRICT,
+  quantity numeric(10,2) NOT NULL,
+  UNIQUE(subscription_id, delivery_date, product_id, packaging_option_id)
+);
