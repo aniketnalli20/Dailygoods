@@ -164,6 +164,18 @@ if ($sub) {
     echo '<label>Line 1</label><input type="text" name="line1" required />';
     echo '<label>City</label><input type="text" name="city" required />';
     echo '<label>Pincode</label><input type="text" name="pincode" required />';
+    echo '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+    echo '<div><label>Latitude</label><input type="number" step="0.000001" name="lat" id="lat" /></div>';
+    echo '<div><label>Longitude</label><input type="number" step="0.000001" name="lng" id="lng" /></div>';
+    echo '</div>';
+    echo '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />';
+    echo '<div id="pickmap" style="height:300px;border:1px solid #eee;border-radius:6px;margin-top:8px"></div>';
+    echo '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>';
+    echo '<script>'; 
+    echo 'var pm = L.map("pickmap").setView([28.6139,77.2090], 12);';
+    echo 'L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"&copy; OpenStreetMap"}).addTo(pm);';
+    echo 'var marker; pm.on("click", function(e){ var c=e.latlng; document.getElementById("lat").value=c.lat.toFixed(6); document.getElementById("lng").value=c.lng.toFixed(6); if (marker) pm.removeLayer(marker); marker=L.marker([c.lat,c.lng]).addTo(pm); });';
+    echo '</script>';
     echo '</fieldset>';
     echo '<h4>Select Products</h4>';
     echo '<div id="items">';

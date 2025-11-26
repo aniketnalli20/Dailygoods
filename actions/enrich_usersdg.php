@@ -19,6 +19,23 @@ function slugify($s) {
     $s = preg_replace('/\.+/', '.', $s);
     return trim($s, '.');
 }
+function genApiPassword() {
+    $apiKey = getenv('API_NINJAS_KEY');
+    if (!$apiKey) return null;
+    $url = 'https://api.api-ninjas.com/v1/passwordgenerator?length=12&uppercase=true&lowercase=true&numbers=true&special=false';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['X-Api-Key: ' . $apiKey]);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $resp = curl_exec($ch);
+    if ($resp === false) { curl_close($ch); return null; }
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($code !== 200) return null;
+    $data = json_decode($resp, true);
+    if (!is_array($data) || empty($data['random_password'])) return null;
+    return $data['random_password'];
+}
 function genPhone($seedIdx) {
     $start = [6,7,8,9][($seedIdx % 4)];
     $num = (string)$start;
@@ -54,14 +71,14 @@ for ($i = 1; $i < count($lines); $i++) {
     if ($name === '' || strtolower($name) === 'name') continue;
     $slug = slugify($name);
     $emailBase = $slug !== '' ? $slug : ('user' . $i);
-    $email = $emailBase . '@example.in';
+    $email = $emailBase . '@gmail.com';
     $ctr = 1;
     while (isset($emails[$email])) { $email = $emailBase . $ctr . '@example.in'; $ctr++; }
     $emails[$email] = true;
     $phone = genPhone($i);
     while (isset($phones[$phone])) { $i2 = $i + $ctr; $phone = genPhone($i2); $ctr++; }
     $phones[$phone] = true;
-    $password = genPassword($name, $i);
+    $password = genApiPassword() ?: genPassword($name, $i);
     $role = 'customer';
     $enriched[] = $name . "\t" . $email . "\t" . $phone . "\t" . $password . "\t" . $role;
 }

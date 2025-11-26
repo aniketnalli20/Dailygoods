@@ -24,6 +24,8 @@ foreach ($subs as $s) {
     if ($ok) $deliverToday[] = $s;
 }
 $manifest = [];
+// prepared statement to fetch coordinates per subscription
+$coordStmt = $pdo->prepare('SELECT a.lat, a.lng, a.line1 FROM subscriptions s LEFT JOIN addresses a ON s.address_id = a.id WHERE s.id = :sid');
 foreach ($deliverToday as $s) {
     $key = ($s['city'] ?: 'Unknown') . ' ' . ($s['pincode'] ?: '');
     if (!isset($manifest[$key])) $manifest[$key] = [];
@@ -39,7 +41,9 @@ foreach ($deliverToday as $s) {
     foreach ($extras as $it) { if (!isset($merged[$it['id']])) $merged[$it['id']] = ['name'=>$it['name'], 'quantity'=>0]; $merged[$it['id']]['quantity'] += $it['quantity']; }
     $final = [];
     foreach ($merged as $pid=>$val) { $final[] = ['name'=>$val['name'], 'quantity'=>$val['quantity']]; }
-    $manifest[$key][] = ['address'=>$s['line1'], 'items'=>$final];
+    $coordStmt->execute([':sid'=>$s['id']]);
+    $c = $coordStmt->fetch();
+    $manifest[$key][] = ['address'=>$s['line1'], 'items'=>$final, 'lat'=>($c['lat'] ?? null), 'lng'=>($c['lng'] ?? null)];
 }
 echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Vendor</title><link rel="stylesheet" href="styles.css"></head><body>';
 echo '<div class="container">';
@@ -60,6 +64,29 @@ foreach ($manifest as $zone => $rows) {
     echo '</div>';
 }
 if (!$manifest) echo '<p>No deliveries scheduled today.</p>';
+echo '</div>';
+// Map view card
+echo '<div class="card">';
+echo '<h3>Map View</h3>';
+echo '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />';
+echo '<div id="map" style="height:400px;border:1px solid #eee;border-radius:6px"></div>';
+echo '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>';
+echo '<script>'; 
+echo 'var map = L.map("map").setView([28.6139, 77.2090], 11);';
+echo 'L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"}).addTo(map);';
+foreach ($manifest as $zone => $rows) {
+    foreach ($rows as $row) {
+        $lat = isset($row['lat']) ? (float)$row['lat'] : 0;
+        $lng = isset($row['lng']) ? (float)$row['lng'] : 0;
+        if ($lat && $lng) {
+            $addr = htmlspecialchars($row['address'] ?: '');
+            $itemsText = '';
+            foreach ($row['items'] as $it) { $itemsText .= htmlspecialchars($it['name']).' x '.htmlspecialchars($it['quantity'])."<br>"; }
+            echo 'L.marker(['.$lat.','.$lng.']).addTo(map).bindPopup("<strong>'.$addr.'</strong><br>'.$itemsText.'");';
+        }
+    }
+}
+echo '</script>';
 echo '</div>';
 echo '</body></html>';
 ?>

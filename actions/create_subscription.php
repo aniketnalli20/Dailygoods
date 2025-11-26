@@ -9,13 +9,15 @@ $frequency = isset($_POST['frequency']) ? $_POST['frequency'] : 'daily';
 $line1 = isset($_POST['line1']) ? trim($_POST['line1']) : '';
 $city = isset($_POST['city']) ? trim($_POST['city']) : '';
 $pincode = isset($_POST['pincode']) ? trim($_POST['pincode']) : '';
+$lat = isset($_POST['lat']) && $_POST['lat'] !== '' ? (float)$_POST['lat'] : null;
+$lng = isset($_POST['lng']) && $_POST['lng'] !== '' ? (float)$_POST['lng'] : null;
 $items = isset($_POST['items']) && is_array($_POST['items']) ? $_POST['items'] : [];
 if (!$line1 || !$city || !$pincode) { header('Location: /index.php?page=dashboard'); exit; }
 $pdo = DB::conn();
 $pdo->beginTransaction();
 try {
-    $addrStmt = $pdo->prepare('INSERT INTO addresses(user_id,line1,city,pincode) VALUES(:uid,:line1,:city,:pincode) RETURNING id');
-    $addrStmt->execute([':uid'=>$user['id'], ':line1'=>$line1, ':city'=>$city, ':pincode'=>$pincode]);
+    $addrStmt = $pdo->prepare('INSERT INTO addresses(user_id,line1,city,pincode,lat,lng) VALUES(:uid,:line1,:city,:pincode,:lat,:lng) RETURNING id');
+    $addrStmt->execute([':uid'=>$user['id'], ':line1'=>$line1, ':city'=>$city, ':pincode'=>$pincode, ':lat'=>$lat, ':lng'=>$lng]);
     $address_id = (int)$addrStmt->fetchColumn();
     $subStmt = $pdo->prepare('INSERT INTO subscriptions(user_id,address_id,plan,frequency,status,start_date) VALUES(:uid,:addr,:plan,:freq,:status,current_date) RETURNING id');
     $subStmt->execute([':uid'=>$user['id'], ':addr'=>$address_id, ':plan'=>$plan, ':freq'=>$frequency, ':status'=>'active']);
