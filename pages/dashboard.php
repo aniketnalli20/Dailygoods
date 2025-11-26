@@ -66,6 +66,71 @@ if ($sub) {
     echo '<button class="btn" type="submit">Save Changes</button>';
     echo '</form>';
     echo '</div>';
+    // Delivery calendar
+    $monthParam = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
+    $firstDay = $monthParam . '-01';
+    $startTs = strtotime($firstDay);
+    $daysInMonth = (int)date('t', $startTs);
+    echo '<div class="card">';
+    echo '<h3>Delivery Calendar (' . htmlspecialchars($monthParam) . ')</h3>';
+    echo '<p><a class="btn secondary" href="index.php?page=dashboard&month=' . date('Y-m', strtotime('-1 month', $startTs)) . '">Prev</a> ';
+    echo '<a class="btn secondary" href="index.php?page=dashboard&month=' . date('Y-m', strtotime('+1 month', $startTs)) . '">Next</a></p>';
+    $datesStmt = $pdo->prepare('SELECT delivery_date, status FROM delivery_dates WHERE subscription_id = :sid AND delivery_date BETWEEN :from AND :to');
+    $datesStmt->execute([':sid'=>$sub['id'], ':from'=>$firstDay, ':to'=>date('Y-m-t', $startTs)]);
+    $overrides = [];
+    foreach ($datesStmt->fetchAll() as $row) { $overrides[$row['delivery_date']] = $row['status']; }
+    $extrasStmt = $pdo->prepare('SELECT de.id, de.delivery_date, p.name, de.quantity FROM delivery_extras de JOIN products p ON de.product_id=p.id WHERE de.subscription_id = :sid AND de.delivery_date BETWEEN :from AND :to ORDER BY de.delivery_date');
+    $extrasStmt->execute([':sid'=>$sub['id'], ':from'=>$firstDay, ':to'=>date('Y-m-t', $startTs)]);
+    $extrasByDate = [];
+    foreach ($extrasStmt->fetchAll() as $ex) { $d=$ex['delivery_date']; if (!isset($extrasByDate[$d])) $extrasByDate[$d]=[]; $extrasByDate[$d][]=$ex; }
+    echo '<div class="calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">';
+    for ($d=1; $d<=$daysInMonth; $d++) {
+        $date = date('Y-m-d', strtotime("$monthParam-" . str_pad($d,2,'0',STR_PAD_LEFT)));
+        $dow = date('N', strtotime($date));
+        $status = $overrides[$date] ?? null;
+        $deliver = false;
+        if ($status === 'holiday') { $deliver=false; }
+        else if ($sub['status'] !== 'active') { $deliver=false; }
+        else if (!empty($sub['paused_until']) && $date <= $sub['paused_until']) { $deliver=false; }
+        else {
+            if ($sub['frequency']==='daily') $deliver=true;
+            else if ($sub['frequency']==='alternate') $deliver=((int)date('z', strtotime($date)) % 2)===0;
+            else if ($sub['frequency']==='weekly') $deliver=($dow===1);
+        }
+        $cls = $deliver ? 'background:#ecf2ff' : 'background:#fff';
+        echo '<div style="border:1px solid #eee;border-radius:6px;padding:8px;'.$cls.'">';
+        echo '<div><strong>' . $d . '</strong> ' . ($deliver ? '<span style="color:#2563eb">Deliver</span>' : '<span style="color:#6b7280">No Delivery</span>') . '</div>';
+        echo '<form method="post" action="actions/calendar_set_holiday.php" style="margin-top:6px">';
+        echo '<input type="hidden" name="date" value="' . $date . '" />';
+        echo '<button class="btn secondary" type="submit">Mark Holiday</button>';
+        echo '</form>';
+        echo '<form method="post" action="actions/calendar_add_extra.php" style="margin-top:6px">';
+        echo '<input type="hidden" name="date" value="' . $date . '" />';
+        echo '<label style="margin-top:6px">Extra Item</label><select name="product_id">';
+        foreach ($products as $p) { echo '<option value="'.$p['id'].'">'.htmlspecialchars($p['name']).'</option>'; }
+        echo '</select>';
+        echo '<label>Packaging</label><select name="packaging_option_id">';
+        foreach ($packs as $pk) { echo '<option value="'.$pk['id'].'">'.htmlspecialchars($pk['name']).'</option>'; }
+        echo '</select>';
+        echo '<label>Qty</label><input type="number" step="0.1" min="0.1" name="quantity" />';
+        echo '<button class="btn" type="submit">Add Extra</button>';
+        echo '</form>';
+        if (!empty($extrasByDate[$date])) {
+            echo '<div style="margin-top:6px">';
+            foreach ($extrasByDate[$date] as $ex) {
+                echo '<div>' . htmlspecialchars($ex['name']) . ' x ' . htmlspecialchars($ex['quantity']) . ' '; 
+                echo '<form style="display:inline" method="post" action="actions/calendar_remove_extra.php">';
+                echo '<input type="hidden" name="id" value="' . (int)$ex['id'] . '" />';
+                echo '<input type="hidden" name="date" value="' . $date . '" />';
+                echo '<button class="btn secondary" type="submit">Remove</button>';
+                echo '</form></div>';
+            }
+            echo '</div>';
+        }
+        echo '</div>';
+    }
+    echo '</div>';
+    echo '</div>';
 } else {
     echo '<div class="card">';
     echo '<h3>Create Subscription</h3>';
