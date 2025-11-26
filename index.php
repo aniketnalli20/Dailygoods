@@ -43,6 +43,24 @@ if ($page === 'dashboard') {
     exit;
 }
 
+if ($page === 'admin') {
+    if (!$user || ($user['role'] !== 'admin')) {
+        header('Location: /index.php?page=dashboard');
+        exit;
+    }
+    require __DIR__ . '/pages/admin.php';
+    exit;
+}
+
+if ($page === 'vendor') {
+    if (!$user || !in_array($user['role'], ['vendor','admin'])) {
+        header('Location: /index.php?page=dashboard');
+        exit;
+    }
+    require __DIR__ . '/pages/vendor.php';
+    exit;
+}
+
 http_response_code(404);
 echo 'Not Found';
 ?>

@@ -13,7 +13,11 @@ echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dashboard</title><
 echo '<div class="container">';
 echo '<div class="topbar">';
 echo '<h2>Welcome, ' . htmlspecialchars($user['name']) . '</h2>';
-echo '<form method="post" action="actions/logout.php"><button class="btn secondary" type="submit">Logout</button></form>';
+echo '<div>';
+if ($user['role'] === 'admin') echo '<a class="btn secondary" href="index.php?page=admin">Admin</a> ';
+if (in_array($user['role'], ['vendor','admin'])) echo '<a class="btn secondary" href="index.php?page=vendor">Vendor</a> ';
+echo '<form style="display:inline" method="post" action="actions/logout.php"><button class="btn secondary" type="submit">Logout</button></form>';
+echo '</div>';
 echo '</div>';
 if ($sub) {
     echo '<div class="card">';
