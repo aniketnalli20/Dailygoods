@@ -1,17 +1,15 @@
 @font-face {
   font-family: 'Inter';
-  src: url('assets/fonts/Inter/Inter-VariableFont_opsz,wght.woff2') format('woff2'),
-       local('Inter'),
-       url('assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  src: url('assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype'),
+       local('Inter');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Inter';
-  src: url('assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.woff2') format('woff2'),
-       local('Inter Italic'),
-       url('assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  src: url('assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype'),
+       local('Inter Italic');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -29,3 +27,19 @@ input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radiu
 .item { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 10px; }
 .topbar { display: flex; justify-content: space-between; align-items: center; }
 fieldset { border: 1px solid #eee; border-radius: 8px; padding: 12px; margin: 12px 0; }
+/* Auth layout */
+.auth-wrap { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.auth-left { display: flex; align-items: center; justify-content: center; padding: 40px; }
+.auth-right { background: linear-gradient(135deg,#ede9fe,#e0f2fe); display: flex; align-items: center; justify-content: center; }
+.auth-card { max-width: 420px; width: 100%; }
+.brand { font-weight: 600; margin-bottom: 24px; font-size: 20px; }
+.auth-title { margin: 0 0 8px 0; font-size: 28px; }
+.muted { color: #6b7280; margin: 0 0 16px 0; }
+.input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; }
+.row { display: flex; align-items: center; justify-content: space-between; margin: 12px 0; }
+.btn.primary { background: #6d28d9; }
+.btn.google { margin-top: 10px; background: #fff; border: 1px solid #d1d5db; color: #111827; }
+.actions.auth { display: flex; justify-content: space-between; margin-top: 8px; }
+.link { color: #6d28d9; text-decoration: none; }
+.auth-illustration { max-width: 520px; width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+@media (max-width: 900px) { .auth-wrap { grid-template-columns: 1fr; } .auth-right { display: none; } }

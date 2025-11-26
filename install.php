@@ -21,6 +21,20 @@ try {
     $pdo = DB::conn();
 }
 $pdo->exec($schema);
+// If an old database named 'milkride' exists, migrate its data into the new database
+try {
+    $oldName = 'milkride';
+    $check = $server->query("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".$oldName."'");
+    $exists = $check && $check->fetchColumn();
+    if ($exists) {
+        $tables = ['users','addresses','packaging_options','products','subscriptions','subscription_items','delivery_dates','delivery_extras'];
+        foreach ($tables as $t) {
+            $server->exec('INSERT IGNORE INTO `'.$name.'`.`'.$t.'` SELECT * FROM `'.$oldName.'`.`'.$t.'`');
+        }
+    }
+} catch (Exception $migrEx) {
+    // ignore migration errors to keep install idempotent
+}
 $pdo->exec($seed);
 echo 'OK';
 ?>
