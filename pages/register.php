@@ -21,10 +21,19 @@ echo '<div class="auth-right"';
 $img = null;
 if (defined('CDN_BASE_URL') && CDN_BASE_URL) { $img = rtrim(CDN_BASE_URL,'/') . '/login-hero.jpg'; }
 else {
-    $localJpg = __DIR__ . '/../assets/images/login-hero.jpg';
-    $localSvg = __DIR__ . '/../assets/images/login-hero.svg';
-    if (file_exists($localJpg)) { $img = 'assets/images/login-hero.jpg'; }
-    else if (file_exists($localSvg)) { $img = 'assets/images/login-hero.svg'; }
+    $candidates = [
+        __DIR__ . '/../assets/images/login-hero.jpg',
+        __DIR__ . '/../assets/images/login-hero.jpeg',
+        __DIR__ . '/../assets/images/login-hero.png',
+    ];
+    $webMap = [
+        __DIR__ . '/../assets/images/login-hero.jpg' => 'assets/images/login-hero.jpg',
+        __DIR__ . '/../assets/images/login-hero.jpeg' => 'assets/images/login-hero.jpeg',
+        __DIR__ . '/../assets/images/login-hero.png' => 'assets/images/login-hero.png',
+    ];
+    $found = null;
+    foreach ($candidates as $p) { if (file_exists($p)) { $found = $p; break; } }
+    if ($found) { $img = $webMap[$found]; }
     else { $img = 'assets/images/login-hero.svg'; }
 }
 echo ' style="background-image:url(' . htmlspecialchars($img) . ');background-size:cover;background-position:center"></div>';
