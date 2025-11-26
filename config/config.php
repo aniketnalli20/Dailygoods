@@ -4,4 +4,5 @@ define('DB_PORT', '3306');
 define('DB_NAME', 'dailygoods');
 define('DB_USER', 'root');
 define('DB_PASS', '');
+define('CDN_BASE_URL', '');
 ?>

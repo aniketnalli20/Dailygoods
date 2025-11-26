@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../config/config.php';
 echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Login</title><link rel="stylesheet" href="styles.css">';
 echo '</head><body>';
 echo '<div class="auth-wrap">';
@@ -21,7 +22,8 @@ echo '<div class="actions"><span>Don\'t have an account?</span> <a class="link" 
 echo '</div>';
 echo '</div>';
 echo '<div class="auth-right">';
-echo '<img class="auth-illustration" src="assets/images/login-hero.jpg" alt="Dailygoods - Fresh Milk" />';
+$img = (defined('CDN_BASE_URL') && CDN_BASE_URL) ? (rtrim(CDN_BASE_URL,'/') . '/login-hero.jpg') : 'assets/images/login-hero.jpg';
+echo '<img class="auth-illustration" src="' . $img . '" alt="Dailygoods - Fresh Milk" />';
 echo '</div>';
 echo '</div>';
 echo '</body></html>';
